@@ -1,0 +1,7 @@
+Content/AsteroidBrown.png - created by FunwithPixels of OpenGameArt.org(https://opengameart.org/content/brown-asteroid) License: Creative Commons (CC-BY 4.0)
+Content/star_small.png - from kenney.nl(https://kenney.nl/assets/simple-space) License: Creative Common(CC0 1.0 Universal)
+Content/star_tiny.png - from kenney.nl(https://kenney.nl/assets/simple-space) License: Creative Common(CC0 1.0 Universal)
+Content/Space/SPACE.ttf - SPACE font created by Ibram Syah from dafont.com(https://www.dafont.com/space-3.font) free for personal use
+Content/ship.png - from nicepng.com(https://www.nicepng.com/ourpic/u2q8a9y3a9r5i1r5_vector-spaces-ship-8-bit-spaceship-sprite/) free for personal use
+Content/laser.png - created by wenrexa of itch.io(https://wenrexa.itch.io/laser2020) License: CCO
+Content/spaceship.png - created by thomaswp of OpenGameArt.org(https://opengameart.org/content/spaceship-2) License: Creative Commons (CC-BY-SA 3.0)
