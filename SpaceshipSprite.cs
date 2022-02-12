@@ -2,23 +2,73 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using STAAR.Collisions;
 
 namespace STAAR
 {
     public class SpaceshipSprite
     {
-        private Texture2D texture;
+        KeyboardState currentKeyboardState;
+        KeyboardState priorKeyboardState;
 
-        private Vector2 position = new Vector2(560, 350);
+        private Texture2D texture;
+        private Vector2 position = new Vector2(Constants.GAME_WIDTH/2, 350);
+        private short hitTimer = 0;
+
+
+        public Color Color = Color.White;
+        public BoundingRectangle Bounds;
 
         public void LoadContent(ContentManager contentManager)
         {
             texture = contentManager.Load<Texture2D>("ship");
+            Bounds = new BoundingRectangle(position.X, position.Y + 10, 56, 16);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (Color == Color.Red) ++hitTimer;
+            if(hitTimer >= 40)
+            {
+                Color = Color.White;
+                hitTimer = 0;
+            }
+
+            priorKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if ((currentKeyboardState.IsKeyDown(Keys.Left) ||
+                currentKeyboardState.IsKeyDown(Keys.A)) && position.X > 0)
+            {
+                position += new Vector2(-300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Right) ||
+                currentKeyboardState.IsKeyDown(Keys.D)) && position.X < Constants.GAME_WIDTH - 56)
+            {
+                position += new Vector2(300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Up) ||
+                currentKeyboardState.IsKeyDown(Keys.W)) && position.Y > 0)
+            {
+                position += new Vector2(0, -300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) ||
+                currentKeyboardState.IsKeyDown(Keys.S)) && position.Y < Constants.GAME_HEIGHT - 40)
+            {
+                position += new Vector2(0, 300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
+            Bounds.X = position.X;
+            Bounds.Y = position.Y + 10;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(80, 80), 0.2f, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position, null, Color, 0, new Vector2(0,0), 0.1f, SpriteEffects.None, 0);
+        }
+
+        public void Reset()
+        {
+            position = new Vector2(Constants.GAME_WIDTH / 2, 350);
         }
     }
 }

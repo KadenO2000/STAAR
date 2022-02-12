@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using STAAR.Collisions;
 
 
 namespace STAAR
@@ -9,7 +10,6 @@ namespace STAAR
     public class AsteroidSprite
     {
         System.Random random = new System.Random();
-        private bool firstDraw = true;
 
         private Texture2D texture;
         private float radius;
@@ -17,13 +17,12 @@ namespace STAAR
 
         public Vector2 Center { get; set; }
         public Vector2 Velocity { get; set; }
+        public BoundingCircle Bounds;
 
         public AsteroidSprite()
         {
-            radius = random.Next(10, 30);
-            rotation = (float)random.NextDouble() * MathHelper.TwoPi;
-            Velocity = new Vector2(random.Next(-10,10), (float)random.NextDouble() * 300);
-            Center = new Vector2(random.Next(50, 680), 50);
+            SetNewAsteroid();
+            Bounds = new BoundingCircle(Center, radius);
         }
 
         public void LoadContent(ContentManager contentManager)
@@ -35,19 +34,25 @@ namespace STAAR
         {
             Center += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (Center.Y < radius * 2 || Center.Y > Constants.GAME_HEIGHT + radius || Center.X < radius * 2 || Center.X > Constants.GAME_WIDTH + radius)
+            if (Center.Y > Constants.GAME_HEIGHT + radius || Center.X > Constants.GAME_WIDTH + radius)
             {
-                radius = random.Next(10, 30);
-                rotation = (float)random.NextDouble() * MathHelper.TwoPi;
-                Velocity = new Vector2(random.Next(-10, 10), (float)random.NextDouble() * 300);
-                Center = new Vector2(random.Next(50, 680), 50);
+                SetNewAsteroid();
             }
-                
+            Bounds.Center = Center;
+            Bounds.Radius = radius;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Center, null, Color.White, rotation, new Vector2(80, 80), radius / 50, SpriteEffects.None, 0);
+        }
+
+        public void SetNewAsteroid()
+        {
+            radius = random.Next(10, 30);
+            rotation = (float)random.NextDouble() * MathHelper.TwoPi;
+            Velocity = new Vector2(random.Next(-20, 20), (float)(random.NextDouble() + 0.3) * 300);
+            Center = new Vector2(random.Next((int)radius, Constants.GAME_WIDTH - (int)radius), 0);
         }
     }
 }

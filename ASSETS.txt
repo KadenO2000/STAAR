@@ -5,3 +5,4 @@ Content/Space/SPACE.ttf - SPACE font created by Ibram Syah from dafont.com(https
 Content/ship.png - from nicepng.com(https://www.nicepng.com/ourpic/u2q8a9y3a9r5i1r5_vector-spaces-ship-8-bit-spaceship-sprite/) free for personal use
 Content/laser.png - created by wenrexa of itch.io(https://wenrexa.itch.io/laser2020) License: CCO
 Content/spaceship.png - created by thomaswp of OpenGameArt.org(https://opengameart.org/content/spaceship-2) License: Creative Commons (CC-BY-SA 3.0)
+Content/heart.png - created by Mapachana of OpenGameArt.org(https://opengameart.org/content/heart-6) License: GPL 3.0

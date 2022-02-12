@@ -19,5 +19,10 @@ namespace STAAR
         {
             spriteBatch.DrawString(space, s, position, Color.Yellow, 0, origin, scale, SpriteEffects.None, 0);
         }
+
+        public Vector2 MeasureString(string s)
+        {
+            return space.MeasureString(s);
+        }
     }
 }
