@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:AsteroidBrown.png
 
+#begin Chad Crouch - Space.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Chad Crouch - Space.mp3
+
+#begin Explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Explosion.wav
+
 #begin heart.png
 /importer:TextureImporter
 /processor:TextureProcessor
