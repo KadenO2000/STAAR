@@ -12,16 +12,15 @@ namespace STAAR
         KeyboardState priorKeyboardState;
 
         private Texture2D texture;
-        private Vector2 position = new Vector2(Constants.GAME_WIDTH/2, 350);
         private short hitTimer = 0;
 
-
+        public Vector2 Position = new Vector2(Constants.GAME_WIDTH / 2, 350);
         public Color Color = Color.White;
         public BoundingRectangle Bounds;
 
         public SpaceshipSprite(ContentManager content)
         {
-            Bounds = new BoundingRectangle(position.X, position.Y + 10, 56, 16);
+            Bounds = new BoundingRectangle(Position.X, Position.Y + 10, 56, 16);
             LoadContent(content);
         }
 
@@ -43,38 +42,38 @@ namespace STAAR
             currentKeyboardState = Keyboard.GetState();
 
             if ((currentKeyboardState.IsKeyDown(Keys.Left) ||
-                currentKeyboardState.IsKeyDown(Keys.A)) && position.X > 0)
+                currentKeyboardState.IsKeyDown(Keys.A)) && Position.X > 0)
             {
-                position += new Vector2(-300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                Position += new Vector2(-300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
             }
             if ((currentKeyboardState.IsKeyDown(Keys.Right) ||
-                currentKeyboardState.IsKeyDown(Keys.D)) && position.X < Constants.GAME_WIDTH - 56)
+                currentKeyboardState.IsKeyDown(Keys.D)) && Position.X < Constants.GAME_WIDTH - 56)
             {
-                position += new Vector2(300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                Position += new Vector2(300 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
             }
             if ((currentKeyboardState.IsKeyDown(Keys.Up) ||
-                currentKeyboardState.IsKeyDown(Keys.W)) && position.Y > 0)
+                currentKeyboardState.IsKeyDown(Keys.W)) && Position.Y > 0)
             {
-                position += new Vector2(0, -300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Position += new Vector2(0, -300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
             if ((currentKeyboardState.IsKeyDown(Keys.Down) ||
-                currentKeyboardState.IsKeyDown(Keys.S)) && position.Y < Constants.GAME_HEIGHT - 40)
+                currentKeyboardState.IsKeyDown(Keys.S)) && Position.Y < Constants.GAME_HEIGHT - 40)
             {
-                position += new Vector2(0, 300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Position += new Vector2(0, 300 * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            Bounds.X = position.X;
-            Bounds.Y = position.Y + 10;
+            Bounds.X = Position.X;
+            Bounds.Y = Position.Y + 10;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 pos, float scale)
         {
-            if (pos != Vector2.Zero) position = pos;
-            spriteBatch.Draw(texture, position, null, Color, 0, new Vector2(0,0), scale, SpriteEffects.None, 0);
+            if (pos != Vector2.Zero) Position = pos;
+            spriteBatch.Draw(texture, Position, null, Color, 0, new Vector2(0,0), scale, SpriteEffects.None, 0);
         }
 
         public void Reset()
         {
-            position = new Vector2(Constants.GAME_WIDTH / 2, 350);
+            Position = new Vector2(Constants.GAME_WIDTH / 2, 350);
         }
     }
 }

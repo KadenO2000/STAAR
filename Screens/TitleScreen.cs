@@ -60,7 +60,7 @@ namespace STAAR.Screens
 
             string title = "Spaceship Trained to\nAnnihilate Asteroids\nRigorously (STAAR):\nThe Game";
             ScreenManager.Font.Draw(gameTime, spriteBatch, title, new Vector2(10, 2), new Vector2(0, 0), 1f);
-            ScreenManager.Font.Draw(gameTime, spriteBatch, "Enter to Exit Game", new Vector2(10, Constants.GAME_HEIGHT - 50), new Vector2(0, 0), 0.75f);
+            ScreenManager.Font.Draw(gameTime, spriteBatch, "Enter to Start Game", new Vector2(10, Constants.GAME_HEIGHT - 50), new Vector2(0, 0), 0.75f);
 
             spriteBatch.End();
         }

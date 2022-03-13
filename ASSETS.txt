@@ -7,3 +7,4 @@ Content/laser.png - created by wenrexa of itch.io(https://wenrexa.itch.io/laser2
 Content/spaceship.png - created by thomaswp of OpenGameArt.org(https://opengameart.org/content/spaceship-2) License: Creative Commons (CC-BY-SA 3.0)
 Content/heart.png - created by Mapachana of OpenGameArt.org(https://opengameart.org/content/heart-6) License: GPL 3.0
 Content/Chad Crouch - Space.mp3 - created by Chad Crouch found at (https://freemusicarchive.org/music/Chad_Crouch/arps-ii/space-1) License: Creative Commons https://creativecommons.org/licenses/by-nc/4.0/
+Content/Explosion.png & Content/Smoke.png- provided by the XNA project samples under the Microsoft Permissive License (https://github.com/CartBlanche/MonoGame-Samples)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using STAAR.StateManagement;
+using STAAR.Particles;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,10 +17,15 @@ namespace STAAR.Screens
         private AsteroidSprite[] asteroids;
         private HeartSprite hearts;
 
+        private ExplosionParticleSystem explosion;
+
         private Texture2D star;
         private Texture2D smallerStar;
 
         private SoundEffect spaceShipHit;
+
+        private bool shaking;
+        private float shakeTime = 0;
 
         private uint score;
         private uint highScore = 0;
@@ -34,10 +40,13 @@ namespace STAAR.Screens
             for (int i = 0; i < asteroids.Length; i++) asteroids[i] = new AsteroidSprite(content);
             hearts = new HeartSprite(content);
 
+            explosion = new ExplosionParticleSystem(ScreenManager.Game, 20);
+            ScreenManager.Game.Components.Add(explosion);
+
             star = content.Load<Texture2D>("star_small");
             smallerStar = content.Load<Texture2D>("star_tiny");
 
-            spaceShipHit = content.Load<SoundEffect>("Explosion");
+            spaceShipHit = content.Load<SoundEffect>("ExplosionSound");
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -48,6 +57,7 @@ namespace STAAR.Screens
                 asteroid.Update(gameTime);
                 if (asteroid.Bounds.CollidesWith(spaceshipSprite.Bounds))
                 {
+                    explosion.PlaceExplosion(asteroid.Center);
                     asteroid.Center = new Vector2(1000, 1000);
                     spaceshipSprite.Color = Color.Red;
                     Lives--;
@@ -56,6 +66,7 @@ namespace STAAR.Screens
             }
             if (Lives <= 0)
             {
+                shaking = true;
                 if (score > highScore) highScore = score;
                 score = 0;
                 Lives = 3;
@@ -68,7 +79,21 @@ namespace STAAR.Screens
         public override void Draw(GameTime gameTime)
         {
             var spriteBatch = ScreenManager.SpriteBatch;
-            spriteBatch.Begin();
+
+            Matrix shakeTransform = Matrix.Identity;
+            if (shaking)
+            {
+                shakeTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                shakeTransform = Matrix.CreateTranslation(10 * MathF.Sin(shakeTime), 10 * MathF.Cos(shakeTime), 0);
+                if (shakeTime > 500)
+                {
+                    shaking = false;
+                    shakeTime = 0;
+                }
+
+            }
+
+            spriteBatch.Begin(transformMatrix: shakeTransform);
 
             DrawStars(spriteBatch);
 
