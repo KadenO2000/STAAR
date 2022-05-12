@@ -45,12 +45,13 @@ namespace STAAR.Screens
             var keyboard = input.CurrentKeyboardState;
             if (keyboard.IsKeyDown(Keys.Enter))
             {
-                LoadingScreen.Load(ScreenManager, true, new LevelScreen());
+                LoadingScreen.Load(ScreenManager, true, new Level1());
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
+
             var spriteBatch = ScreenManager.SpriteBatch;
             spriteBatch.Begin();
 
@@ -63,6 +64,8 @@ namespace STAAR.Screens
             ScreenManager.Font.Draw(gameTime, spriteBatch, "Enter to Start Game", new Vector2(10, Constants.GAME_HEIGHT - 50), new Vector2(0, 0), 0.75f);
 
             spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }

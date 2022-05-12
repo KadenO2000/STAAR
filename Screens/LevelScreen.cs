@@ -2,10 +2,12 @@
 using Microsoft.Xna.Framework;
 using STAAR.StateManagement;
 using STAAR.Particles;
+using STAAR.Sprites;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using System.Collections.Generic;
 
 namespace STAAR.Screens
 {
@@ -13,9 +15,13 @@ namespace STAAR.Screens
     {
         private ContentManager content;
 
+        KeyboardState currentKeyboardState;
+        KeyboardState priorKeyboardState;
+
         private SpaceshipSprite spaceshipSprite;
         private AsteroidSprite[] asteroids;
         private HeartSprite hearts;
+        private List<LaserSprite> lasers = new List<LaserSprite>();
 
         private ExplosionParticleSystem explosion;
 
@@ -23,13 +29,16 @@ namespace STAAR.Screens
         private Texture2D smallerStar;
 
         private SoundEffect spaceShipHit;
+        private SoundEffect laserShot;
+        private SoundEffect asteroidHit;
 
         private bool shaking;
         private float shakeTime = 0;
 
-        private uint score;
-        private uint highScore = 0;
+        protected uint score;
         private short Lives = 3;
+        protected short laserShots;
+        protected short numDestroyed;
 
         public override void Activate()
         {
@@ -47,10 +56,16 @@ namespace STAAR.Screens
             smallerStar = content.Load<Texture2D>("star_tiny");
 
             spaceShipHit = content.Load<SoundEffect>("ExplosionSound");
+            laserShot = content.Load<SoundEffect>("Laser_Shoot");
+            asteroidHit = content.Load<SoundEffect>("AsteroidExplosion");
+
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
+            priorKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
             spaceshipSprite.Update(gameTime);
             foreach (var asteroid in asteroids)
             {
@@ -63,15 +78,37 @@ namespace STAAR.Screens
                     Lives--;
                     spaceShipHit.Play();
                 }
+                foreach(LaserSprite shot in lasers)
+                {
+                    if (asteroid.Bounds.CollidesWith(shot.Bounds))
+                    {
+                        explosion.PlaceExplosion(asteroid.Center);
+                        asteroid.Center = new Vector2(1000, 1000);
+                        shot.Position.X = 1000;
+                        score += 1000;
+                        ++numDestroyed;
+                        asteroidHit.Play();
+                    }
+                }
+            }
+
+            if(currentKeyboardState.IsKeyDown(Keys.Space) && priorKeyboardState.IsKeyUp(Keys.Space))
+            {
+                if (laserShots > 0)
+                {
+                    lasers.Add(new LaserSprite(content, spaceshipSprite));
+                    laserShots--;
+                    laserShot.Play();
+                }
+                else; //play empty sound
+            }
+            foreach(LaserSprite shot in lasers)
+            {
+                shot.Update(gameTime);
             }
             if (Lives <= 0)
             {
-                shaking = true;
-                if (score > highScore) highScore = score;
-                score = 0;
-                Lives = 3;
-                spaceshipSprite.Reset();
-                foreach (var asteroid in asteroids) asteroid.SetNewAsteroid();
+                LoadingScreen.Load(ScreenManager, true, new LoseScreen());
             }
             score = score + 10;
         }
@@ -97,14 +134,19 @@ namespace STAAR.Screens
 
             DrawStars(spriteBatch);
 
+            foreach(LaserSprite shot in lasers)
+            {
+                shot.Draw(spriteBatch);
+            }
+
             spaceshipSprite.Draw(gameTime, spriteBatch, Vector2.Zero, 0.1f);
             foreach (var asteroid in asteroids) asteroid.Draw(gameTime, spriteBatch);
 
             ScreenManager.Font.Draw(gameTime, spriteBatch, score.ToString(), new Vector2(2, 2), Vector2.Zero, 1);
-            string highScoreString = "High Score: " + highScore.ToString();
-            Vector2 length = ScreenManager.Font.MeasureString(highScoreString);
-            ScreenManager.Font.Draw(gameTime, spriteBatch, highScoreString, new Vector2(Constants.GAME_WIDTH / 2 - length.X / 2, 2), Vector2.Zero, 0.8f);
             hearts.Draw(gameTime, spriteBatch, Lives);
+
+            string shotsText = "Shots Left: " + laserShots;
+            ScreenManager.Font.Draw(gameTime, spriteBatch, shotsText, new Vector2(2, Constants.GAME_HEIGHT -20), new Vector2(0, 0), (float)0.5);
 
             spriteBatch.End();
         }
